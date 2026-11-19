@@ -1,8 +1,6 @@
-import { lazy } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nProvider } from './i18n/I18nProvider';
 import { ThemeProvider } from './theme/ThemeProvider';
-import { AppShell } from './components/layout/AppShell';
 import { AppRoutes } from './routes';
 
 export function App() {
@@ -16,5 +14,3 @@ export function App() {
     </ThemeProvider>
   );
 }
-
-export { AppShell, Route, Routes, lazy };

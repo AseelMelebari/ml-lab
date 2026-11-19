@@ -27,7 +27,7 @@ export function useTrainTest(points: ClassPoint[], testFrac: number, seed: numbe
 export default function DecisionTreeLab({ presentation, preset }: LabProps) {
   const { t, num } = useI18n();
   const { classRGB, plotRGB, regionAlpha } = usePalette();
-  const initDs: ClassificationDatasetId = 'moons';
+  const initDs: ClassificationDatasetId = preset === 'overfit' ? 'overlap' : 'moons';
   const [dataset, setDataset] = useState<ClassificationDatasetId>(initDs);
   const [seed, setSeed] = useState(8);
   const [n, setN] = useState(120);

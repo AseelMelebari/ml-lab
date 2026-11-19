@@ -128,6 +128,7 @@ export default function QLearningLab({ presentation }: LabProps) {
     if (tool === 'start') for (let i = 0; i < cells.length; i++) if (cells[i] === 'start') cells[i] = 'empty';
     if (cells[s] === 'start' && tool !== 'start') return;
     cells[s] = tool;
+    labEvent('q-learning', 'edited-grid');
     const e = { ...env, cells };
     setEnv(e);
     resetAll(e);

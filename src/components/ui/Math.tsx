@@ -47,7 +47,7 @@ export function Rich({ text, className }: { text: string; className?: string }) 
 
 export function inline(s: string): ReactNode[] {
   const out: ReactNode[] = [];
-  const re = /(\$[^$]+\$|\*\*[^*]+\*\*|`[^`]+`)/g;
+  const re = /(\$[^$]+\$|\*\*[^*]+\*\*|\*[^*\s][^*]*\*|`[^`]+`)/g;
   let last = 0;
   let m: RegExpExecArray | null;
   let k = 0;
@@ -56,6 +56,7 @@ export function inline(s: string): ReactNode[] {
     const tok = m[0];
     if (tok.startsWith('$')) out.push(<TeX key={k++} tex={tok.slice(1, -1)} />);
     else if (tok.startsWith('**')) out.push(<strong key={k++} className="font-semibold text-ink">{tok.slice(2, -2)}</strong>);
+    else if (tok.startsWith('*')) out.push(<em key={k++}>{tok.slice(1, -1)}</em>);
     else
       out.push(
         <code key={k++} className="rounded bg-surface-2 px-1.5 py-0.5 text-[0.85em] text-accent-ink">
