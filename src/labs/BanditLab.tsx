@@ -27,7 +27,13 @@ export default function BanditLab({ presentation, preset }: LabProps) {
   const [epsilon, setEpsilon] = useState(0.1);
   const [seed, setSeed] = useState(1);
   const rng = useRef<RNG>(mulberry32(1));
-  const [agent, setAgent] = useState<AgentState>(() => createAgent(k));
+  const [agent, setAgentState] = useState<AgentState>(() => createAgent(k));
+  // Ref mirror so several pulls in the same render batch never read a stale agent.
+  const agentRef = useRef(agent);
+  const setAgent = (a: AgentState) => {
+    agentRef.current = a;
+    setAgentState(a);
+  };
   const [history, setHistory] = useState<Pull[]>([]);
   const [running, setRunning] = useState(false);
   const [speed, setSpeed] = useState(4);
@@ -42,7 +48,7 @@ export default function BanditLab({ presentation, preset }: LabProps) {
     setHistory([]);
   };
   const pull = (n: number) => {
-    let a = agent;
+    let a = agentRef.current;
     const h: Pull[] = [];
     for (let i = 0; i < n && a.steps < MAX_STEPS; i++) {
       const { arm, explored } = selectArm(a, epsilon, rng.current);
@@ -103,7 +109,7 @@ export default function BanditLab({ presentation, preset }: LabProps) {
                   onClick={() => {
                     // Manual pull: the learner still updates from the real sampled reward.
                     const reward = pullArm(env, i, rng.current);
-                    setAgent((a) => updateAgent(a, i, reward));
+                    setAgent(updateAgent(agentRef.current, i, reward));
                     setHistory((h) => [...h, { arm: i, reward, explored: true }]);
                   }}
                   className={cx('relative rounded-2xl border p-2 sm:p-3 text-center transition-all', isLast ? 'border-accent shadow-[0_0_0_3px_rgba(45,212,191,.25)] -translate-y-0.5' : 'border-line', 'bg-surface-2/60 hover:border-accent/50')}

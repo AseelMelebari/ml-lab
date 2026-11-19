@@ -28,7 +28,7 @@ export function LabShell({
   status?: ReactNode;
 }) {
   return (
-    <div className={cx('grid gap-4', presentation ? 'xl:grid-cols-[minmax(0,1fr)_380px]' : 'lg:grid-cols-[minmax(0,1fr)_320px]')}>
+    <div className={cx('grid grid-cols-[minmax(0,1fr)] gap-4', presentation ? 'xl:grid-cols-[minmax(0,1fr)_380px]' : 'lg:grid-cols-[minmax(0,1fr)_320px]')}>
       <div className="min-w-0 space-y-4">
         <div className="rounded-2xl border border-line bg-surface p-2 sm:p-3">{viz}</div>
         {status}

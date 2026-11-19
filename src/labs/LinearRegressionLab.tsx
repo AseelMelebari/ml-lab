@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Contour, DataLine, EditablePoints, Heatmap, Marker, Plot2D, usePlot, type EditMode } from '@/components/charts/Plot2D';
 import { LineChart } from '@/components/charts/LineChart';
 import { Callout, Slider, Stat, Toggle } from '@/components/ui/primitives';
@@ -33,7 +33,13 @@ export default function LinearRegressionLab({ presentation, preset }: LabProps) 
   const [lrIdx, setLrIdx] = useState(P.lrIdx);
   const lr = LR_STEPS[lrIdx];
   const [maxIter, setMaxIter] = useState(400);
-  const [model, setModel] = useState<LineModel>({ w: 0, b: 0 });
+  const [model, setModelState] = useState<LineModel>({ w: 0, b: 0 });
+  const modelRef = useRef(model);
+  const iterRef = useRef(0);
+  const setModel = (m: LineModel) => {
+    modelRef.current = m;
+    setModelState(m);
+  };
   const [history, setHistory] = useState<{ losses: number[]; path: LineModel[] }>({ losses: [], path: [{ w: 0, b: 0 }] });
   const [running, setRunning] = useState(false);
   const [diverged, setDiverged] = useState(false);
@@ -59,6 +65,7 @@ export default function LinearRegressionLab({ presentation, preset }: LabProps) 
     setRunning(false);
     setModel({ w: 0, b: 0 });
     setHistory({ losses: [], path: [{ w: 0, b: 0 }] });
+    iterRef.current = 0;
     setDiverged(false);
     setConverged(false);
   };
@@ -68,12 +75,13 @@ export default function LinearRegressionLab({ presentation, preset }: LabProps) 
       setRunning(false);
       return;
     }
-    let m = model;
+    let m = modelRef.current;
+    const it0 = iterRef.current;
     const losses: number[] = [];
     const path: LineModel[] = [];
     let div = false;
     let conv = false;
-    for (let i = 0; i < k && iter + i < maxIter; i++) {
+    for (let i = 0; i < k && it0 + i < maxIter; i++) {
       const r = gradientStep(points, m, lr);
       m = r.model;
       losses.push(r.loss);
@@ -89,6 +97,7 @@ export default function LinearRegressionLab({ presentation, preset }: LabProps) 
       }
     }
     setModel(m);
+    iterRef.current = it0 + losses.length;
     setHistory((h) => ({ losses: [...h.losses, ...losses], path: [...h.path, ...path] }));
     labEvent('linear-regression', 'trained');
     if (div) {
@@ -99,7 +108,7 @@ export default function LinearRegressionLab({ presentation, preset }: LabProps) 
       setConverged(true);
       setRunning(false);
       labEvent('linear-regression', 'converged');
-    } else if (iter + losses.length >= maxIter) setRunning(false);
+    } else if (it0 + losses.length >= maxIter) setRunning(false);
   };
 
   useLoop(running, () => doSteps(speed), 60);

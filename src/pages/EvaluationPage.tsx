@@ -59,8 +59,8 @@ export default function EvaluationPage() {
   return (
     <>
       <PageHeader eyebrow={t(['Model training & evaluation', 'تدريب النماذج وتقييمها'])} title={t(['From raw data to trustworthy results', 'من البيانات الخام إلى نتائج موثوقة'])} desc={t(['Preparing data, understanding training, and measuring performance honestly. Every widget below computes its numbers live.', 'تجهيز البيانات، وفهم التدريب، وقياس الأداء بأمانة. كل أداة أدناه تحسب أرقامها مباشرة.'])} />
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 py-10 lg:grid-cols-[240px_minmax(0,1fr)]">
-        <nav aria-label={t(['Evaluation sections', 'أقسام التقييم'])} className="lg:sticky lg:top-24 lg:self-start">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)] gap-8 px-4 sm:px-6 py-10 lg:grid-cols-[240px_minmax(0,1fr)]">
+        <nav aria-label={t(['Evaluation sections', 'أقسام التقييم'])} className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <ul className="flex gap-1 overflow-x-auto lg:flex-col">
             {EVAL_SECTIONS.map((s, i) => (
               <li key={s.id}>
