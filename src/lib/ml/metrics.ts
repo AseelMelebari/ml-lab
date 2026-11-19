@@ -90,7 +90,7 @@ export interface RocPoint {
 export function rocCurve(scores: readonly number[], labels: readonly number[]): { points: RocPoint[]; auc: number } {
   const P = labels.filter((l) => l === 1).length;
   const N = labels.length - P;
-  const order = scores.map((s, i) => i).sort((a, b) => scores[b] - scores[a]);
+  const order = scores.map((_, i) => i).sort((a, b) => scores[b] - scores[a]);
   const points: RocPoint[] = [{ threshold: Infinity, fpr: 0, tpr: 0 }];
   let tp = 0;
   let fp = 0;

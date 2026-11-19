@@ -1,0 +1,208 @@
+@import 'tailwindcss';
+@import 'katex/dist/katex.min.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- Design tokens. Edit these to re-brand the platform. ---- */
+:root {
+  --c-bg: #f5f7fb;
+  --c-surface: #ffffff;
+  --c-surface-2: #eef2f8;
+  --c-border: #d9e1ec;
+  --c-text: #0b1428;
+  --c-muted: #4a5873;
+  --c-subtle: #6b7891;
+  --c-accent: #0d9488;
+  --c-accent-ink: #0f766e;
+  --c-cyan: #0891b2;
+  --c-purple: #7c3aed;
+  --c-danger: #dc2626;
+  --c-success: #15803d;
+  --c-warn: #b45309;
+  --c-class-0: #0d9488;
+  --c-class-1: #d97706;
+  --c-class-2: #7c3aed;
+  --c-class-3: #db2777;
+  --c-grid: rgba(15, 23, 42, 0.08);
+  --c-axis: rgba(15, 23, 42, 0.45);
+  --c-plot: #fbfcfe;
+  color-scheme: light;
+}
+.dark {
+  --c-bg: #070d1c;
+  --c-surface: #0c1529;
+  --c-surface-2: #121e38;
+  --c-border: #1e2c49;
+  --c-text: #e7edf7;
+  --c-muted: #9aa8c0;
+  --c-subtle: #7d8aa3;
+  --c-accent: #2dd4bf;
+  --c-accent-ink: #5eead4;
+  --c-cyan: #22d3ee;
+  --c-purple: #a78bfa;
+  --c-danger: #f87171;
+  --c-success: #4ade80;
+  --c-warn: #fbbf24;
+  --c-class-0: #0fa596;
+  --c-class-1: #c47206;
+  --c-class-2: #8b5cf6;
+  --c-class-3: #ec4899;
+  --c-grid: rgba(148, 163, 184, 0.1);
+  --c-axis: rgba(148, 163, 184, 0.5);
+  --c-plot: #0a1326;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: 'IBM Plex Sans Arabic', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-border);
+  --color-ink: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-subtle: var(--c-subtle);
+  --color-accent: var(--c-accent);
+  --color-accent-ink: var(--c-accent-ink);
+  --color-cyan: var(--c-cyan);
+  --color-purple: var(--c-purple);
+  --color-danger: var(--c-danger);
+  --color-success: var(--c-success);
+  --color-warn: var(--c-warn);
+  --color-class-0: var(--c-class-0);
+  --color-class-1: var(--c-class-1);
+  --color-class-2: var(--c-class-2);
+  --color-class-3: var(--c-class-3);
+}
+
+html {
+  background: var(--c-bg);
+  color: var(--c-text);
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--c-bg);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+html[lang='ar'] body {
+  font-family: var(--font-arabic);
+  line-height: 1.75;
+}
+html[lang='ar'] .prose-ml p,
+html[lang='ar'] .prose-ml li {
+  line-height: 1.95;
+}
+code,
+pre,
+.font-mono {
+  font-family: var(--font-mono);
+}
+/* Code, formulas and numeric readouts always read left-to-right. */
+pre,
+code,
+.katex,
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-cyan);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.bg-grid-faint {
+  background-image: linear-gradient(var(--c-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-grid) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+/* Range input styling */
+input[type='range'].ml-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--c-surface-2);
+  outline-offset: 4px;
+}
+input[type='range'].ml-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  border: 3px solid var(--c-surface);
+  box-shadow: 0 0 0 1px var(--c-accent);
+  cursor: pointer;
+}
+input[type='range'].ml-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  border: 3px solid var(--c-surface);
+  cursor: pointer;
+}
+
+.plot-svg {
+  touch-action: none;
+  user-select: none;
+}
+
+/* Instructor (presentation) mode scales the whole interface up. */
+html.presenting {
+  font-size: 19px;
+}
+@media (min-width: 1600px) {
+  html.presenting {
+    font-size: 21px;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes pulse-ring {
+  0% {
+    r: 8;
+    opacity: 0.7;
+  }
+  100% {
+    r: 22;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
