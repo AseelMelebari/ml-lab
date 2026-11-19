@@ -22,10 +22,12 @@ type View = 'forest' | 'tree' | 'compare';
 export default function RandomForestLab({ presentation, preset }: LabProps) {
   const { t, num } = useI18n();
   const { classRGB, plotRGB, regionAlpha } = usePalette();
-  const [dataset, setDataset] = useState<ClassificationDatasetId>('overlap');
-  const [seed, setSeed] = useState(12);
+  const initDs: ClassificationDatasetId = preset === 'compare' ? 'moons' : 'overlap';
+  const initSeed = preset === 'compare' ? 3 : 2;
+  const [dataset, setDataset] = useState<ClassificationDatasetId>(initDs);
+  const [seed, setSeed] = useState(initSeed);
   const [n, setN] = useState(140);
-  const ps = usePointSet<ClassPoint>(() => makeClassification('overlap', 140, 12), LIMIT);
+  const ps = usePointSet<ClassPoint>(() => makeClassification(initDs, 140, initSeed), LIMIT);
   const [mode, setMode] = useState<EditMode>('query');
   const [addClass, setAddClass] = useState(0);
   const [nTrees, setNTrees] = useState(25);
@@ -158,6 +160,11 @@ export default function RandomForestLab({ presentation, preset }: LabProps) {
           </StatGrid>
           {Number.isFinite(forestTest) && Number.isFinite(singleTest) && forestTest > singleTest + 0.02 && (
             <Callout tone="tip">{t(['Averaging many de-correlated trees reduces variance: the forest generalizes better than one deep tree trained on the same data.', 'متوسط العديد من الأشجار غير المترابطة يقلل التباين: الغابة تعمّم أفضل من شجرة عميقة واحدة مدرَّبة على البيانات نفسها.'])}</Callout>
+          )}
+          {Number.isFinite(forestTest) && Number.isFinite(singleTest) && forestTest < singleTest && (
+            <Callout tone="info" title={t(['Results vary from split to split', 'النتائج تختلف من تقسيم لآخر'])}>
+              {t(['On this particular train/test split the single tree scored higher. A test set of ~40 points is small, so scores are noisy. Try other seeds: averaged over many splits, forests usually generalize better.', 'في هذا التقسيم تحديدًا حققت الشجرة الواحدة نتيجة أعلى. بيانات اختبار من نحو 40 نقطة صغيرة، فتكون النتائج مشوّشة. جرّب بذورًا أخرى: في المتوسط عبر تقسيمات كثيرة تعمّم الغابات عادةً بشكل أفضل.'])}
+            </Callout>
           )}
         </>
       }

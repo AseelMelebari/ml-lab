@@ -45,7 +45,7 @@ export const DEMOS: DemoScenario[] = [
     title: ['Decision Tree vs Random Forest', 'شجرة القرار مقابل الغابة العشوائية'],
     goal: ['Show how averaging many randomised trees smooths the boundary and generalizes better.', 'إظهار كيف يعطي متوسط أشجار عشوائية كثيرة حدًا أنعم وتعميمًا أفضل.'],
     steps: [['Compare the two maps side by side.', 'قارن الخريطتين جنبًا إلى جنب.'], ['Switch to “One tree” and browse a few trees.', 'انتقل إلى «شجرة واحدة» وتصفّح بعض الأشجار.'], ['Show the accuracy vs number of trees chart.', 'اعرض مخطط الدقة مقابل عدد الأشجار.']],
-    talkingPoints: [['Bootstrap samples + random features = different trees.', 'عينات bootstrap + خصائص عشوائية = أشجار مختلفة.'], ['Averaging reduces variance.', 'أخذ المتوسط يقلل التباين.']],
+    talkingPoints: [['Bootstrap samples + random features = different trees.', 'عينات bootstrap + خصائص عشوائية = أشجار مختلفة.'], ['Averaging reduces variance.', 'أخذ المتوسط يقلل التباين.'], ['Change the seed: on a single small split the tree can win — the forest wins on average.', 'غيّر البذرة: في تقسيم صغير واحد قد تفوز الشجرة — لكن الغابة تفوز في المتوسط.']],
   },
   {
     id: 'svm-margin',
